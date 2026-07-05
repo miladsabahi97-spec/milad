@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌳 SmartTree AI - سیستم تشخیص بیماری گیاهان</title>
+    
+    <!-- SEO -->
+    <meta name="description" content="سیستم هوشمند تشخیص و درمان بیماری‌های گیاهان با استفاده از هوش مصنوعی">
+    <meta name="keywords" content="بیماری گیاهان, تشخیص بیماری, هوش مصنوعی, گیاهپزشکی, کشاورزی">
+    <meta name="author" content="SmartTree AI">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="🌳 SmartTree AI">
+    <meta property="og:description" content="سیستم هوشمند تشخیص بیماری‌های گیاهان">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://your-domain.com">
+    <meta property="og:image" content="https://your-domain.com/assets/images/logo.png">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="assets/images/favicon.ico" type="image/x-icon">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
+    <!-- Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <!-- استایل اختصاصی -->
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<!-- ============================================================
+   صفحه خوش‌آمدگویی
+   ============================================================ -->
+<div class="welcome-page" id="welcomePage">
+    <video class="welcome-bg-video" id="bgVideo" autoplay muted loop playsinline>
+        <source src="https://cdn.pixabay.com/video/2022/03/20/112118-693889382_large.mp4" type="video/mp4">
+    </video>
+    <div class="welcome-overlay"></div>
+    
+    <div class="welcome-content">
+        <span class="logo-icon">🌳</span>
+        <h1>SmartTree AI</h1>
+        <p>🌱 هوش مصنوعی تشخیص و درمان بیماری‌های گیاهی<br>
+        با پشتیبانی از ۲۴ بیماری رایج و مشاوره تخصصی</p>
+        
+        <div class="video-grid">
+            <div class="video-item" onclick="changeBgVideo('https://cdn.pixabay.com/video/2022/03/20/112118-693889382_large.mp4')">
+                <video muted loop playsinline>
+                    <source src="https://cdn.pixabay.com/video/2022/03/20/112118-693889382_large.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="video-item" onclick="changeBgVideo('https://cdn.pixabay.com/video/2021/05/18/76278-557286375_large.mp4')">
+                <video muted loop playsinline>
+                    <source src="https://cdn.pixabay.com/video/2021/05/18/76278-557286375_large.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="video-item" onclick="changeBgVideo('https://cdn.pixabay.com/video/2020/06/20/42768-433240547_large.mp4')">
+                <video muted loop playsinline>
+                    <source src="https://cdn.pixabay.com/video/2020/06/20/42768-433240547_large.mp4" type="video/mp4">
+                </video>
+            </div>
+        </div>
+        
+        <button class="enter-btn" onclick="enterSite()">
+            🚀 ورود به سایت
+        </button>
+        
+        <div class="features-preview">
+            <span>🌿 ۲۴ بیماری</span>
+            <span>🤖 تشخیص AI</span>
+            <span>📞 مشاوره</span>
+            <span>🌍 نقشه جهانی</span>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================
+   سایت اصلی
+   ============================================================ -->
+
+<!-- ===== توست ===== -->
+<div class="toast" id="toast"></div>
+
+<!-- ===== هدر ===== -->
+<header class="app-header" id="mainHeader" style="display:none;">
+    <div class="logo">
+        <i class="fas fa-tree"></i>
+        Smart<span>Tree</span> AI
+    </div>
+    <div class="header-actions">
+        <div class="weather" id="weatherDisplay">
+            <i class="fas fa-map-pin"></i> تهران
+            <span><i class="fas fa-sun"></i> ۲۵°C</span>
+            <span><i class="fas fa-tint"></i> ۳۲%</span>
+            <span><i class="fas fa-wind"></i> ۱۲ km/h</span>
+        </div>
+        <div class="consultant-number" onclick="window.location.href='tel:09381491058'">
+            <i class="fas fa-phone"></i>
+            ۰۹۳۸۱۴۹۱۰۵۸
+        </div>
+        <button class="home-toggle" onclick="navigateTo('home')" title="خانه">
+            <i class="fas fa-home"></i>
+        </button>
+        <button class="dark-toggle" onclick="toggleDark()">
+            <i class="fas fa-moon"></i>
+        </button>
+    </div>
+</header>
+
+<!-- ===== بدنه ===== -->
+<div class="app-body" id="mainBody" style="display:none;">
+
+    <!-- ===== سایدبار ===== -->
+    <nav class="sidebar">
+        <a class="active" data-page="home" onclick="navigateTo('home', this)"><i class="fas fa-home"></i> خانه</a>
+        <a data-page="ai" onclick="navigateTo('ai', this)"><i class="fas fa-robot"></i> تشخیص AI</a>
+        <a data-page="diseases" onclick="navigateTo('diseases', this)"><i class="fas fa-disease"></i> بیماری‌ها</a>
+        <a data-page="map" onclick="navigateTo('map', this)"><i class="fas fa-globe-americas"></i> نقشه جهانی</a>
+        <a data-page="stats" onclick="navigateTo('stats', this)"><i class="fas fa-chart-bar"></i> آمار</a>
+        <a data-page="admin" onclick="navigateTo('admin', this)"><i class="fas fa-user-shield"></i> مدیریت</a>
+        <a onclick="openChatbot()"><i class="fas fa-comment-dots"></i> چت‌بات</a>
+        <div class="premium-box">
+            <h4>💎 پریمیوم</h4>
+            <p>گزارش دقیق + مشاوره تخصصی</p>
+            <button class="btn-premium" onclick="window.location.href='tel:09381491058'">
+                تماس با مشاور
+            </button>
+        </div>
+    </nav>
+
+    <!-- ===== محتوای صفحات ===== -->
+    <div class="page-content">
+
+        <!-- ===== صفحه خانه ===== -->
+        <div class="page page-home active" id="page-home">
+            <div class="stats-grid" data-aos="fade-up">
+                <div class="stat-card" onclick="showToast('📊 کل بیماری‌های ثبت‌شده')">
+                    <i class="fas fa-disease"></i>
+                    <div class="number" id="statTotal">۲۴</div>
+                    <div class="label">کل بیماری‌ها</div>
+                </div>
+                <div class="stat-card" onclick="showToast('⚠️ بیماری‌های فعال')">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <div class="number" id="statActive">۸</div>
+                    <div class="label">فعال</div>
+                </div>
+                <div class="stat-card" onclick="showToast('✅ بیماری‌های درمان‌شده')">
+                    <i class="fas fa-check-circle"></i>
+                    <div class="number" id="statResolved">۱۲</div>
+                    <div class="label">درمان‌شده</div>
+                </div>
+                <div class="stat-card" onclick="showToast('🤖 دقت هوش مصنوعی')">
+                    <i class="fas fa-robot"></i>
+                    <div class="number" id="statAccuracy">۹۷%</div>
+                    <div class="label">دقت AI</div>
+                </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;" data-aos="fade-up" data-aos-delay="100">
+                <div class="disease-card" onclick="navigateTo('ai')">
+                    <div class="card-header">
+                        <span class="icon">🤖</span>
+                        <h4>تشخیص با هوش مصنوعی</h4>
+                    </div>
+                    <div class="sub">تصویر برگ را آپلود کنید تا بیماری تشخیص داده شود</div>
+                </div>
+                <div class="disease-card" onclick="navigateTo('diseases')">
+                    <div class="card-header">
+                        <span class="icon">🌿</span>
+                        <h4>۲۴ بیماری گیاهی</h4>
+                    </div>
+                    <div class="sub">مشاهده همه بیماری‌ها با درمان علمی</div>
+                </div>
+                <div class="disease-card" onclick="navigateTo('map')">
+                    <div class="card-header">
+                        <span class="icon">🌍</span>
+                        <h4>نقشه جهانی</h4>
+                    </div>
+                    <div class="sub">مشاهده شیوع بیماری‌ها در سراسر جهان</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== صفحه تشخیص AI ===== -->
+        <div class="page page-ai" id="page-ai">
+            <div class="ai-section">
+                <div class="ai-header">
+                    <h3><i class="fas fa-robot"></i> 🤖 تشخیص بیماری با هوش مصنوعی</h3>
+                    <span class="ai-status" id="aiStatus">
+                        <i class="fas fa-circle"></i> آنلاین
+                    </span>
+                </div>
+                <div class="ai-upload-area" id="aiUploadArea">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p><strong>تصویر برگ گیاه را آپلود کنید</strong></p>
+                    <p style="font-size:12px;margin-top:3px;">پشتیبانی از JPG, PNG, WEBP</p>
+                    <input type="file" id="aiFileInput" accept="image/*" onchange="handleAIUpload(this)">
+                </div>
+                <div class="ai-result" id="aiResult">
+                    <h4>🧬 نتیجه تشخیص:</h4>
+                    <div class="result-item"><span>بیماری تشخیص‌داده‌شده</span> <strong id="aiDisease">-</strong></div>
+                    <div class="result-item"><span>دقت</span> <strong id="aiConfidence">-</strong></div>
+                    <div class="confidence-bar"><div class="fill" id="aiConfidenceBar" style="width:0%"></div></div>
+                    <div class="result-item" style="border:none;margin-top:5px;"><span>درمان پیشنهادی</span> <span id="aiTreatment" style="font-size:12px;">-</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== صفحه بیماری‌ها ===== -->
+        <div class="page page-diseases" id="page-diseases">
+            <div class="filter-bar">
+                <label><i class="fas fa-sliders-h"></i> فیلتر:</label>
+                <span class="filter-tag active" data-filter="all" onclick="filterDiseases('all',this)">همه</span>
+                <span class="filter-tag" data-filter="low" onclick="filterDiseases('low',this)">🟢 کم خطر</span>
+                <span class="filter-tag" data-filter="mid" onclick="filterDiseases('mid',this)">🟡 متوسط</span>
+                <span class="filter-tag" data-filter="high" onclick="filterDiseases('high',this)">🔴 پرخطر</span>
+            </div>
+            <div id="diseasesContainer"></div>
+        </div>
+
+        <!-- ===== صفحه نقشه ===== -->
+        <div class="page page-map" id="page-map">
+            <div class="map-box">
+                <h3><i class="fas fa-map-marked-alt" style="color:var(--primary);"></i> نقشه جهانی شیوع بیماری‌ها</h3>
+                <div id="map"></div>
+            </div>
+        </div>
+
+        <!-- ===== صفحه آمار ===== -->
+        <div class="page page-stats" id="page-stats">
+            <div class="chart-box">
+                <h3><i class="fas fa-chart-bar" style="color:var(--primary);"></i> آمار دسته‌بندی بیماری‌ها</h3>
+                <canvas id="diseaseChart"></canvas>
+            </div>
+        </div>
+
+        <!-- ===== صفحه مدیریت ===== -->
+        <div class="page page-admin" id="page-admin">
+            <div class="admin-panel">
+                <div class="admin-header">
+                    <h3><i class="fas fa-user-shield"></i> 📋 پنل مدیریت</h3>
+                    <button onclick="clearAllMessages()" style="background:var(--danger);color:white;border:none;padding:6px 16px;border-radius:40px;cursor:pointer;">🗑️ پاک کردن همه</button>
+                </div>
+                <div class="admin-stats">
+                    <div class="admin-stat">
+                        <div class="num" id="adminTotalMsg">۰</div>
+                        <div class="label">کل پیام‌ها</div>
+                    </div>
+                    <div class="admin-stat">
+                        <div class="num" id="adminTodayMsg">۰</div>
+                        <div class="label">پیام‌های امروز</div>
+                    </div>
+                    <div class="admin-stat">
+                        <div class="num" id="adminUsers">۱</div>
+                        <div class="label">کاربران</div>
+                    </div>
+                </div>
+                <div style="overflow-x:auto;">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>کاربر</th>
+                                <th>پیام</th>
+                                <th>زمان</th>
+                                <th>عملیات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminMessagesBody">
+                            <tr>
+                                <td colspan="5" style="text-align:center;color:var(--text-secondary);">هنوز پیامی ثبت نشده است</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== فوتر ===== -->
+        <footer class="app-footer">
+            <i class="fas fa-leaf" style="color:var(--primary);"></i>
+            SmartTree AI v5.0 · ۲۴ بیماری · مجهز به هوش مصنوعی · ۲۰۲۶
+            <br>
+            <span style="font-size:11px;">📞 مشاور: ۰۹۳۸۱۴۹۱۰۵۸ | منابع: FAO · مرکز تحقیقات گیاهپزشکی ایران</span>
+        </footer>
+
+    </div>
+</div>
+
+<!-- ===== چت‌بات ===== -->
+<div class="chatbot-container">
+    <button class="chatbot-toggle" onclick="toggleChatbot()" id="chatbotToggle">
+        <i class="fas fa-comment-dots"></i>
+        <span class="badge" id="chatBadge">۱</span>
+    </button>
+</div>
+
+<div class="chatbot-window" id="chatbotWindow">
+    <div class="chatbot-header">
+        <h4><i class="fas fa-robot"></i> مشاور SmartTree</h4>
+        <button class="close-btn" onclick="toggleChatbot()">✕</button>
+    </div>
+    <div class="chatbot-messages" id="chatMessages">
+        <div class="msg bot">
+            🌱 سلام! من دستیار SmartTree هستم.
+            <span class="time">همین الان</span>
+        </div>
+        <div class="typing" id="typingIndicator">
+            <span>●</span><span>●</span><span>●</span>
+        </div>
+    </div>
+    <div class="chatbot-input">
+        <input type="text" id="chatInput" placeholder="سوال خود را بپرسید..." onkeypress="if(event.key==='Enter') sendMessage()">
+        <button onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+    </div>
+</div>
+
+<!-- ============================================================
+   جاوااسکریپت اصلی
+   ============================================================ -->
+<script src="assets/js/diseases.js"></script>
+<script src="assets/js/chatbot.js"></script>
+<script src="assets/js/main.js"></script>
+
+</body>
+</html>

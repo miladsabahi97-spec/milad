@@ -1,0 +1,20 @@
+
+---
+
+### ۸. **`package.json`** (برای دیپلوی روی Render/Railway)
+
+```json
+{
+  "name": "smarttree-ai",
+  "version": "1.0.0",
+  "description": "سیستم تشخیص بیماری گیاهان با هوش مصنوعی",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "multer": "^1.4.5"
+  }
+}

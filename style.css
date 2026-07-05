@@ -1,0 +1,938 @@
+/* ============================================================
+   SmartTree AI - استایل کامل
+   ============================================================ */
+
+:root {
+    --primary: #00b894;
+    --primary-dark: #00876c;
+    --primary-light: #e0f7f0;
+    --secondary: #6c5ce7;
+    --accent: #fdcb6e;
+    --danger: #e17055;
+    --success: #00b894;
+    --info: #0984e3;
+    --bg: #f0f4f9;
+    --card: rgba(255, 255, 255, 0.85);
+    --text: #1a2e3f;
+    --text-secondary: #4a6378;
+    --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    --radius: 20px;
+    --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    --glass-bg: rgba(255, 255, 255, 0.2);
+    --glass-border: rgba(255, 255, 255, 0.3);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', 'Tahoma', system-ui, sans-serif;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+body.dark {
+    --bg: #0d1b1a;
+    --card: rgba(20, 40, 36, 0.9);
+    --text: #e6f0ec;
+    --text-secondary: #9bb8ae;
+    --shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    --glass-bg: rgba(0, 0, 0, 0.3);
+    --glass-border: rgba(255, 255, 255, 0.1);
+}
+
+/* ===== اسکرول ===== */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
+
+/* ===== انیمیشن‌ها ===== */
+@keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-15px) rotate(2deg); }
+}
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(50px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+@keyframes zoomIn {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
+}
+@keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.animate-float { animation: float 4s ease-in-out infinite; }
+.animate-pulse { animation: pulse 2s ease-in-out infinite; }
+.animate-slide { animation: slideIn 0.6s ease-out; }
+.animate-fade { animation: fadeInUp 0.6s ease-out; }
+.animate-zoom { animation: zoomIn 0.6s ease-out; }
+
+/* ===== صفحه خوش‌آمدگویی ===== */
+.welcome-page {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.welcome-page.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(1.1);
+}
+.welcome-bg-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+}
+.welcome-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, 
+        rgba(0, 0, 0, 0.7) 0%,
+        rgba(0, 184, 148, 0.3) 50%,
+        rgba(108, 92, 231, 0.3) 100%);
+    z-index: 1;
+}
+.welcome-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    color: white;
+    padding: 40px;
+    max-width: 700px;
+}
+.welcome-content .logo-icon {
+    font-size: 80px;
+    animation: float 3s ease-in-out infinite;
+    display: block;
+    margin-bottom: 20px;
+    filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.3));
+}
+.welcome-content h1 {
+    font-size: 52px;
+    font-weight: 900;
+    margin-bottom: 12px;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    
+    /* گرادیانت برای متن */
+    background: linear-gradient(135deg, #00b894, #6c5ce7, #fdcb6e);
+    background-size: 300% 300%;
+    animation: gradientMove 4s ease-in-out infinite;
+    
+    /* ===== کلیپ متن (حل مشکل) ===== */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;  /* برای مرورگرهای جدید */
+}
+.welcome-content p {
+    font-size: 20px;
+    opacity: 0.9;
+    margin-bottom: 30px;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    line-height: 1.8;
+}
+.welcome-content .enter-btn {
+    background: linear-gradient(135deg, #00b894, #6c5ce7);
+    border: none;
+    color: white;
+    padding: 16px 50px;
+    border-radius: 60px;
+    font-size: 20px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: 0 8px 32px rgba(0, 184, 148, 0.4);
+}
+.welcome-content .enter-btn:hover {
+    transform: scale(1.08);
+    box-shadow: 0 12px 48px rgba(0, 184, 148, 0.6);
+}
+.welcome-content .features-preview {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 30px;
+    flex-wrap: wrap;
+}
+.welcome-content .features-preview span {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    padding: 8px 20px;
+    border-radius: 40px;
+    border: 1px solid var(--glass-border);
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.video-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-top: 25px;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.video-grid .video-item {
+    border-radius: 16px;
+    overflow: hidden;
+    aspect-ratio: 16/9;
+    border: 2px solid var(--glass-border);
+    cursor: pointer;
+    transition: var(--transition);
+}
+.video-grid .video-item:hover {
+    transform: scale(1.05);
+    border-color: white;
+}
+.video-grid .video-item video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* ===== هدر ===== */
+.app-header {
+    background: var(--card);
+    backdrop-filter: blur(20px);
+    padding: 14px 30px;
+    box-shadow: var(--shadow);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 2px solid var(--primary-light);
+    flex-wrap: wrap;
+    gap: 12px;
+}
+.app-header .logo {
+    font-size: 22px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.app-header .logo i {
+    color: var(--primary);
+    font-size: 26px;
+    animation: rotate 10s linear infinite;
+}
+.app-header .logo span { color: var(--primary); }
+.header-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.header-actions .weather {
+    background: var(--bg);
+    padding: 6px 16px;
+    border-radius: 40px;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+.header-actions .consultant-number {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    padding: 6px 18px;
+    border-radius: 40px;
+    font-size: 13px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    animation: pulse 2s ease-in-out infinite;
+    cursor: pointer;
+    transition: var(--transition);
+}
+.header-actions .consultant-number:hover {
+    transform: scale(1.05);
+}
+.header-actions .dark-toggle,
+.header-actions .home-toggle {
+    background: var(--bg);
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 17px;
+    color: var(--text);
+    transition: var(--transition);
+}
+.header-actions .dark-toggle:hover,
+.header-actions .home-toggle:hover {
+    transform: scale(1.1);
+    background: var(--primary-light);
+}
+
+/* ===== بدنه ===== */
+.app-body {
+    display: flex;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 20px 30px;
+    gap: 24px;
+}
+
+/* ===== سایدبار ===== */
+.sidebar {
+    width: 230px;
+    min-width: 190px;
+    background: var(--card);
+    backdrop-filter: blur(20px);
+    border-radius: var(--radius);
+    padding: 18px 14px;
+    box-shadow: var(--shadow);
+    height: fit-content;
+    position: sticky;
+    top: 80px;
+    border: 1px solid var(--glass-border);
+}
+.sidebar a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    border-radius: 12px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 14px;
+    transition: var(--transition);
+    margin-bottom: 3px;
+    cursor: pointer;
+}
+.sidebar a:hover {
+    background: var(--primary-light);
+    color: var(--primary);
+    transform: translateX(-4px);
+}
+.sidebar a.active {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    box-shadow: 0 4px 14px rgba(0, 184, 148, 0.3);
+}
+.sidebar a i { width: 20px; font-size: 16px; }
+
+.sidebar .premium-box {
+    margin-top: 16px;
+    background: linear-gradient(145deg, #fef9e7, #fdebd0);
+    padding: 14px;
+    border-radius: var(--radius);
+    text-align: center;
+    border: 1px solid #f5cba7;
+}
+body.dark .sidebar .premium-box {
+    background: linear-gradient(145deg, #2a3d2a, #3d4a2a);
+    border-color: #5a7a4a;
+}
+.sidebar .premium-box h4 { color: #7b4a1e; font-size: 15px; }
+body.dark .sidebar .premium-box h4 { color: #f0d89a; }
+.sidebar .premium-box p { font-size: 12px; color: #5d4037; margin: 6px 0 10px; }
+body.dark .sidebar .premium-box p { color: #c4b08a; }
+.btn-premium {
+    background: linear-gradient(135deg, #d4a14b, #b8893a);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 40px;
+    font-weight: 700;
+    cursor: pointer;
+    width: 100%;
+    transition: var(--transition);
+}
+.btn-premium:hover { transform: scale(1.05); }
+
+/* ===== صفحات ===== */
+.page-content { flex: 1; min-width: 0; }
+.page { display: none; animation: fadeInUp 0.5s ease-out; }
+.page.active { display: block; }
+
+/* ===== صفحه خانه ===== */
+.page-home .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 14px;
+    margin-bottom: 20px;
+}
+.page-home .stat-card {
+    background: var(--card);
+    backdrop-filter: blur(20px);
+    padding: 16px 18px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    border-right: 4px solid var(--primary);
+    transition: var(--transition);
+    cursor: pointer;
+    border: 1px solid var(--glass-border);
+}
+.page-home .stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+}
+.page-home .stat-card .number {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--text);
+}
+.page-home .stat-card .label {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: 3px;
+}
+.page-home .stat-card i {
+    float: left;
+    font-size: 22px;
+    opacity: 0.3;
+    color: var(--primary);
+}
+
+/* ===== صفحه تشخیص AI ===== */
+.page-ai .ai-section {
+    background: var(--card);
+    backdrop-filter: blur(20px);
+    border-radius: var(--radius);
+    padding: 22px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--glass-border);
+}
+.page-ai .ai-section .ai-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.page-ai .ai-section .ai-header h3 {
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.page-ai .ai-section .ai-header h3 i { color: var(--primary); }
+.ai-status {
+    background: var(--success);
+    color: white;
+    padding: 4px 14px;
+    border-radius: 40px;
+    font-size: 12px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.ai-status.offline { background: var(--danger); }
+.ai-upload-area {
+    border: 2px dashed var(--primary);
+    border-radius: var(--radius);
+    padding: 30px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: var(--transition);
+    position: relative;
+}
+.ai-upload-area:hover {
+    background: var(--primary-light);
+    transform: scale(1.01);
+}
+.ai-upload-area i {
+    font-size: 40px;
+    color: var(--primary);
+    margin-bottom: 10px;
+}
+.ai-upload-area input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.ai-result {
+    margin-top: 14px;
+    padding: 14px;
+    border-radius: var(--radius);
+    background: var(--primary-light);
+    display: none;
+}
+.ai-result.show { display: block; animation: fadeInUp 0.4s ease-out; }
+.ai-result .result-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+.ai-result .confidence-bar {
+    height: 6px;
+    background: #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 4px;
+}
+.ai-result .confidence-bar .fill {
+    height: 100%;
+    background: var(--primary);
+    border-radius: 10px;
+    transition: width 0.8s;
+}
+
+/* ===== صفحه بیماری‌ها ===== */
+.page-diseases .filter-bar {
+    background: var(--card);
+    backdrop-filter: blur(20px);
+    padding: 12px 18px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    margin-bottom: 18px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 12px;
+    border: 1px solid var(--glass-border);
+}
+.page-diseases .filter-bar label { font-weight: 700; font-size: 13px; }
+.page-diseases .filter-tag {
+    background: var(--bg);
+    padding: 4px 14px;
+    border-radius: 40px;
+    font-size: 12px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: var(--transition);
+}
+.page-diseases .filter-tag:hover { border-color: var(--primary); }
+.page-diseases .filter-tag.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+.disease-category { margin-bottom: 25px; }
+.disease-category .category-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 14px;
+    padding-bottom: 6px;
+    border-bottom: 3px solid var(--primary);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.disease-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+}
+.disease-card {
+    background: var(--card);
+    backdrop-filter: blur(20px);
+    border-radius: var(--radius);
+    padding: 18px 16px;
+    box-shadow: var(--shadow);
+    border-right: 5px solid var(--primary);
+    transition: var(--transition);
+    cursor: pointer;
+    border: 1px solid var(--glass-border);
+}
+.disease-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.12);
+}
+.disease-card .card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+}
+.disease-card .icon { font-size: 28px; }
+.disease-card h4 { font-size: 16px; flex: 1; }
+.disease-card .sub { font-size: 12px; color: var(--text-secondary); margin-bottom: 8px; }
+.disease-card .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+.level-badge {
+    padding: 2px 12px;
+    border-radius: 40px;
+    font-size: 10px;
+    font-weight: 700;
+}
+.level-low { background: #d5f0d5; color: #1f6b3a; }
+.level-mid { background: #fdebd0; color: #a86f2b; }
+.level-high { background: #fadbd8; color: #b03a2e; }
+body.dark .level-low { background: #1a4a2a; color: #7dcc8a; }
+body.dark .level-mid { background: #4a3d1a; color: #e8b85a; }
+body.dark .level-high { background: #4a1a1a; color: #e87a6a; }
+.region-tag {
+    background: var(--bg);
+    padding: 2px 10px;
+    border-radius: 40px;
+    font-size: 10px;
+    color: var(--text-secondary);
+}
+.treatment-box {
+    margin-top: 8px;
+    padding: 8px 12px;
+    background: var(--primary-light);
+    border-radius: 10px;
+    font-size: 12px;
+    display: none;
+}
+.treatment-box.show { display: block; animation: fadeInUp 0.3s ease-out; }
+.treatment-box strong { color: var(--primary); }
+.treatment-box .treatment-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    padding: 3px 0;
+}
+.treatment-box .treatment-item i { color: var(--primary); margin-top: 2px; }
+
+/* ===== صفحه نقشه ===== */
+.page-map .map-box {
+    background: var(--card);
+    backdrop-filter: blur(20px);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--glass-border);
+}
+.page-map .map-box h3 {
+    font-size: 16px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+#map { height: 400px; border-radius: 12px; }
+
+/* ===== صفحه آمار ===== */
+.page-stats .chart-box {
+    background: var(--card);
+    backdrop-filter: blur(20px);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--glass-border);
+}
+.page-stats .chart-box h3 {
+    font-size: 16px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+#diseaseChart { max-height: 300px; max-width: 100%; }
+
+/* ===== صفحه مدیریت ===== */
+.page-admin .admin-panel {
+    background: var(--card);
+    backdrop-filter: blur(20px);
+    border-radius: var(--radius);
+    padding: 22px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--glass-border);
+}
+.page-admin .admin-panel .admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.page-admin .admin-panel .admin-header h3 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--primary);
+}
+.page-admin .admin-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 10px;
+    margin-bottom: 14px;
+}
+.page-admin .admin-stat {
+    background: var(--bg);
+    padding: 10px 14px;
+    border-radius: 12px;
+    text-align: center;
+}
+.page-admin .admin-stat .num {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--primary);
+}
+.page-admin .admin-stat .label {
+    font-size: 11px;
+    color: var(--text-secondary);
+}
+.page-admin .admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+.page-admin .admin-table th {
+    background: var(--primary);
+    color: white;
+    padding: 8px 12px;
+    text-align: right;
+}
+.page-admin .admin-table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--bg);
+}
+.page-admin .admin-table tr:hover td { background: var(--primary-light); }
+.page-admin .msg-delete {
+    background: var(--danger);
+    color: white;
+    border: none;
+    padding: 3px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: var(--transition);
+}
+.page-admin .msg-delete:hover { transform: scale(1.1); }
+
+/* ===== چت‌بات ===== */
+.chatbot-container {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    z-index: 999;
+}
+.chatbot-toggle {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    border: none;
+    font-size: 26px;
+    cursor: pointer;
+    box-shadow: 0 8px 32px rgba(0, 184, 148, 0.4);
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+.chatbot-toggle:hover { transform: scale(1.1); }
+.chatbot-toggle .badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background: var(--danger);
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.chatbot-window {
+    position: fixed;
+    bottom: 100px;
+    right: 25px;
+    width: 360px;
+    max-width: 90vw;
+    height: 450px;
+    max-height: 70vh;
+    background: var(--card);
+    backdrop-filter: blur(20px);
+    border-radius: var(--radius);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid var(--glass-border);
+}
+.chatbot-window.open { display: flex; animation: zoomIn 0.3s ease-out; }
+.chatbot-header {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    padding: 14px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.chatbot-header h4 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
+}
+.chatbot-header .close-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+}
+.chatbot-messages {
+    flex: 1;
+    padding: 14px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.chatbot-messages .msg {
+    max-width: 80%;
+    padding: 8px 14px;
+    border-radius: 14px;
+    font-size: 13px;
+    line-height: 1.5;
+}
+.chatbot-messages .msg.bot {
+    background: var(--bg);
+    color: var(--text);
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+}
+.chatbot-messages .msg.user {
+    background: var(--primary);
+    color: white;
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+}
+.chatbot-messages .msg .time {
+    font-size: 9px;
+    opacity: 0.6;
+    margin-top: 3px;
+    display: block;
+}
+.chatbot-messages .typing {
+    background: var(--bg);
+    padding: 8px 14px;
+    border-radius: 14px;
+    align-self: flex-start;
+    display: none;
+}
+.chatbot-messages .typing.show { display: block; }
+.chatbot-messages .typing span {
+    display: inline-block;
+    animation: dot 1.4s infinite;
+}
+.chatbot-messages .typing span:nth-child(2) { animation-delay: 0.2s; }
+.chatbot-messages .typing span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes dot {
+    0%, 60%, 100% { opacity: 0; }
+    30% { opacity: 1; }
+}
+.chatbot-input {
+    display: flex;
+    padding: 10px 14px;
+    gap: 8px;
+    border-top: 1px solid var(--bg);
+}
+.chatbot-input input {
+    flex: 1;
+    padding: 8px 14px;
+    border: 2px solid var(--bg);
+    border-radius: 30px;
+    outline: none;
+    font-size: 13px;
+    background: var(--bg);
+    color: var(--text);
+}
+.chatbot-input input:focus { border-color: var(--primary); }
+.chatbot-input button {
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: var(--transition);
+}
+.chatbot-input button:hover { transform: scale(1.05); }
+
+/* ===== توست ===== */
+.toast {
+    position: fixed;
+    bottom: 90px;
+    right: 25px;
+    background: var(--card);
+    backdrop-filter: blur(20px);
+    color: var(--text);
+    padding: 12px 24px;
+    border-radius: 14px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    font-weight: 600;
+    transform: translateY(100px);
+    opacity: 0;
+    transition: 0.4s;
+    z-index: 999;
+    max-width: 380px;
+    border: 1px solid var(--glass-border);
+}
+.toast.show { transform: translateY(0); opacity: 1; }
+.toast.error { border-color: var(--danger); color: var(--danger); }
+
+/* ===== فوتر ===== */
+.app-footer {
+    text-align: center;
+    padding: 16px;
+    color: var(--text-secondary);
+    font-size: 12px;
+    border-top: 1px solid var(--primary-light);
+    margin-top: 10px;
+}
+
+/* ===== ریسپانسیو ===== */
+@media (max-width: 1024px) {
+    .app-body { flex-direction: column; padding: 16px; }
+    .sidebar { position: relative; top: 0; width: 100%; display: flex; flex-wrap: wrap; gap: 4px; padding: 12px; }
+    .sidebar a { padding: 6px 12px; font-size: 12px; }
+    .sidebar .premium-box { display: none; }
+    .video-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 768px) {
+    .app-header { padding: 10px 16px; }
+    .header-actions .weather { font-size: 11px; padding: 4px 10px; }
+    .header-actions .consultant-number { font-size: 11px; padding: 4px 12px; }
+    .stats-grid { grid-template-columns: 1fr 1fr; }
+    .disease-grid { grid-template-columns: 1fr 1fr; }
+    .welcome-content h1 { font-size: 32px; }
+    .welcome-content p { font-size: 16px; }
+    .welcome-content .logo-icon { font-size: 50px; }
+    .video-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .chatbot-window { width: 100%; right: 0; bottom: 0; max-height: 80vh; border-radius: 20px 20px 0 0; }
+    .chatbot-container { right: 10px; bottom: 10px; }
+}
+@media (max-width: 480px) {
+    .stats-grid { grid-template-columns: 1fr; }
+    .disease-grid { grid-template-columns: 1fr; }
+    .welcome-content h1 { font-size: 24px; }
+    .video-grid { grid-template-columns: 1fr 1fr; }
+}
